@@ -16,6 +16,8 @@ struct game game;
 // main program
 int main()
 {
+    //Inicializa motor de sprites con los parámetros por defecto
+    SPR_init(0, 0, 0);
     
     while(1)
     {
