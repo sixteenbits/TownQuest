@@ -66,7 +66,7 @@ void handlestate(struct game *game){
         game->loaded_stage=0;
         VDP_resetScreen();
         VDP_drawText("La Vara Estudios", 10 ,13);
-        VDP_drawText("PRESENTS ...", 10 ,15);
+        VDP_drawText("PRESENTS ...", 11 ,15);
     }
     if(game->loaded_stage!=1 && game->current_stage==1) {
         game->loaded_stage=1;
@@ -132,8 +132,8 @@ void init_stage(u16 current_stage, struct game *game) {
     	game->players[i].end_varazo_frame=0;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
-		game->enemies[i].y = 50;
-		game->enemies[i].x = 50;
+		game->enemies[i].y = -1*random()%100;
+		game->enemies[i].x = random()%300;
 		game->enemies[i].vy = 1;
 		game->enemies[i].enabled = 1;
 	}

@@ -8,7 +8,7 @@
 #define GAME_H
 
 #define PLAYERS_SIZE 1
-#define ENEMY_SIZE 1
+#define ENEMY_SIZE 10
 #define PERSON_SIZE 10
 
 struct game {
