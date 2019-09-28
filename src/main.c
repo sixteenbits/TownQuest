@@ -8,6 +8,7 @@
 #include "person.h"
 #include "player.h"
 #include "enemy.h"
+#include "main.h"
 
 
 
@@ -37,7 +38,7 @@ int main()
 
 //hadle the game state
 void handlestate(){
-    game
+    VDP_drawText("Hello Town Quest", 10 ,13);
 }
 // update the phisycs positions
 void updatephisycs(){
