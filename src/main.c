@@ -124,7 +124,15 @@ void run_stage(u16 current_stage, struct game *game) {
 
 	for(i=0; i<PERSON_SIZE; i++) {
 		game->person[i].y+=game->person[i].vy;
-		SPR_setPosition(game->person[i].person_sprite, game->person[i].x, game->person[i].y);
+		// If out of screen, remove
+		if(game->person[i].y>SCREEN_HEIGHT) {
+			game->person[i].enabled=0;
+			SPR_releaseSprite(game->person[i].person_sprite);
+			game->person[i].person_sprite=NULL;
+		}
+		else {
+			SPR_setPosition(game->person[i].person_sprite, game->person[i].x, game->person[i].y);
+		}
 	}
 }
 
@@ -259,6 +267,15 @@ int check_collision(struct game *game){
 						&& abs(game->players[i].y-game->enemies[j].y) < 30) {
 				game->enemies[j].enabled=0;
 				SPR_setAnim(game->enemies[j].enemy_sprite,ENEMY_ANIM_HIT);
+				return 1;
+			}
+		}
+
+		for(j=0; j<PERSON_SIZE; j++) {
+			if(game->person[j].enabled
+					&& abs(game->players[i].x-game->person[j].x) < 30
+					&& abs(game->players[i].y-game->person[j].y) < 30) {
+				SPR_setAnim(game->players[i].player_sprite, ANIM_FAIL);
 				return 1;
 			}
 		}
