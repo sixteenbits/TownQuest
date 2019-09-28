@@ -75,6 +75,7 @@ void handlestate(struct game *game){
 
     if(game->loaded_stage!=2 && game->current_stage==2) {
         game->loaded_stage=2;
+        init_stage(game->loaded_stage, game);
         VDP_resetScreen();
         //Indice para pdoer saber la carga
         u16 ind = TILE_USERINDEX;
@@ -87,8 +88,8 @@ void handlestate(struct game *game){
         	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
         }
     }
-    if(game->loaded_stage==2 && game->current_stage==2) {
-        run_stage(2, game);
+    if(game->loaded_stage>=2 && game->loaded_stage==game->current_stage) {
+        run_stage(game->loaded_stage, game);
     }
 
     // Change State
@@ -113,8 +114,8 @@ void run_stage(u16 current_stage, struct game *game) {
 void init_stage(u16 current_stage, struct game *game) {
 	int i;
 	for(i=0; i<PLAYERS_SIZE; i++) {
-		game->players[i].y = 4;
-		game->players[i].x = i*2;
+		game->players[i].y = 160;
+		game->players[i].x = 150;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y = 0;
