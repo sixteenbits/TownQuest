@@ -126,6 +126,9 @@ void run_stage(u16 current_stage, struct game *game) {
 
 void init_stage(u16 current_stage, struct game *game) {
 	int i;
+    u16 ind=TILE_USERINDEX;
+        VDP_setPaletteColors(PAL0, (u16*)stage1.palette->data, 16);
+        VDP_drawImageEx(PLAN_A, &stage1, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
 	for(i=0; i<PLAYERS_SIZE; i++) {
 		game->players[i].y = 160;
 		game->players[i].x = 150;
