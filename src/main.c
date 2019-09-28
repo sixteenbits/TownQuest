@@ -205,7 +205,7 @@ void init_stage(u16 current_stage, struct game *game) {
     }
     for(i=0; i<PERSON_SIZE; i++) {
     	game->person[i].person_sprite = SPR_addSprite(&gente, game->person[i].x, game->person[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
-    	SPR_setAnim(game->person[i].person_sprite,7+random()%2);
+    	SPR_setAnim(game->person[i].person_sprite,6+(2*(random()%2)));
     }
     VDP_setPalette(PAL1,tiovara.palette->data);
     VDP_setPalette(PAL2,gente.palette->data);
