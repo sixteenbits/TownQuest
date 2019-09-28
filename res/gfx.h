@@ -4,5 +4,6 @@
 extern const Image titulo;
 extern const Image stage1;
 extern const Image vara;
+extern const Image game_over;
 
 #endif // _RES_GFX_H_

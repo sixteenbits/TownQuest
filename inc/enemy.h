@@ -4,8 +4,6 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#define ENEMY_ANIM_HIT 1
-
 struct enemy {
     // x position
     s16 x;
@@ -17,6 +15,8 @@ struct enemy {
     Sprite* enemy_sprite;
     // Enemy active
     bool enabled;
+    // Enemy index
+    u16 index;
 };
 
 #endif
