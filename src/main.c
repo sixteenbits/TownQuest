@@ -9,12 +9,7 @@
 #include "player.h"
 #include "enemy.h"
 
-// Update the state of the game
-void handlestate();
-// update the phisycs
-void updatephisycs();
-//handle the input controls
-void handleinput();
+
 
 struct game game;
 // main program
