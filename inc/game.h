@@ -9,6 +9,7 @@
 #define PERSON_SIZE 10
 
 struct game {
+    // Backgrounds
     Image* background;
     // Players
     struct player players[PLAYERS_SIZE];
@@ -18,6 +19,8 @@ struct game {
     struct person person[ENEMY_SIZE];
     // Stage to display
     u16 current_stage;
+    // Loaded Stage
+    u16 loaded_stage;
 };
 
 #endif
