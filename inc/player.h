@@ -12,6 +12,7 @@
 #define ANIM_IDLE 5
 
 #define VARAZO_DURATION 15
+#define INITIAL_LIFES 3
 
 struct player {
 	// x position

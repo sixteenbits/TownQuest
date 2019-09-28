@@ -62,6 +62,14 @@ int main()
 
 //hadle the game state
 void handlestate(struct game *game){
+	if(game->game_over) {
+		game->loaded_stage=0;
+		VDP_resetScreen();
+		u16 ind=TILE_USERINDEX;
+		VDP_setPaletteColors(PAL0, (u16*)game_over.palette->data, 16);
+		VDP_drawImageEx(PLAN_A, &game_over, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
+		return;
+	}
 	if(game->loaded_stage!=0 && game->current_stage==0) {
         game->loaded_stage=0;
         VDP_resetScreen();
@@ -103,6 +111,9 @@ void run_stage(u16 current_stage, struct game *game) {
 			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
 			game->players[i].end_varazo_frame=0;
 		}
+		if(game->players[i].lifes<=0) {
+			game->game_over=1;
+		}
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		// Update enemy position
@@ -122,6 +133,7 @@ void run_stage(u16 current_stage, struct game *game) {
 		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
 	}
 
+	// Update persons
 	for(i=0; i<PERSON_SIZE; i++) {
 		game->person[i].y+=game->person[i].vy;
 		// If out of screen, remove
@@ -140,10 +152,12 @@ void init_stage(u16 current_stage, struct game *game) {
 	int i;
 	int positions_s2[3]={50,150,240};
 
+	game->game_over=0;
     for(i=0; i<PLAYERS_SIZE; i++) {
 		game->players[i].y = 160;
 		game->players[i].x = 150;
     	game->players[i].end_varazo_frame=0;
+    	game->players[i].lifes=INITIAL_LIFES;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y = -1*random()%500;
@@ -276,6 +290,7 @@ int check_collision(struct game *game){
 					&& abs(game->players[i].x-game->person[j].x) < 30
 					&& abs(game->players[i].y-game->person[j].y) < 30) {
 				SPR_setAnim(game->players[i].player_sprite, ANIM_FAIL);
+				game->players[i].lifes--;
 				return 1;
 			}
 		}

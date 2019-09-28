@@ -27,6 +27,8 @@ struct game {
     u16 loaded_stage;
     // Clock. Current frame number
     u16 frame;
+    // Flag game over
+    int game_over;
 };
 
 #endif
