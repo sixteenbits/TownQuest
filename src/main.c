@@ -38,6 +38,9 @@ int main()
     {
         // Update frame counter
         game.frame++;
+
+        readcontrollers(&game);
+
         // Update Game
         updatephisycs();
 
@@ -77,7 +80,7 @@ void handlestate(struct game *game){
         u16 ind = TILE_USERINDEX;
         // Load tio de la vara sprite
         for(i=0; i<PLAYERS_SIZE; i++) {
-        	game->players[i].player_sprite = SPR_addSprite(&tiovara, 15, 125, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
+        	game->players[i].player_sprite = SPR_addSprite(&tiovara, game->players[i].x, game->players[i].y, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
         }
         VDP_setPalette(PAL1,tiovara.palette->data);
         for(i=0; i<PLAYERS_SIZE; i++) {
@@ -109,6 +112,10 @@ void run_stage(u16 current_stage, struct game *game) {
 
 void init_stage(u16 current_stage, struct game *game) {
 	int i;
+	for(i=0; i<PLAYERS_SIZE; i++) {
+		game->players[i].y = 4;
+		game->players[i].x = i*2;
+	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y = 0;
 		game->enemies[i].x = 0;
@@ -135,9 +142,32 @@ void init_game_data(struct game *game){
 
 void inputHandler(u16 joy, u16 state, u16 changed)
 {
-	if (changed & state & BUTTON_A) {
+	if (changed & state /*& BUTTON_A*/) {
 		SPR_setAnim(global_game->players[joy].player_sprite,ANIM_VARA);
 		global_game->players[joy].end_varazo_frame = global_game->frame+VARAZO_DURATION;
+    }
+}
+
+void readcontrollers(struct game *game)
+{
+	int i;
+	int value[2];
+    //Se lee el estado del joistick en el puerto 1
+    value[0] = JOY_readJoypad(JOY_1);
+    value[1] = JOY_readJoypad(JOY_2);
+
+    for(i=0; i<PLAYERS_SIZE; i++) {
+		if(value[i] & BUTTON_RIGHT){
+			game->players[i].x++;
+			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
+			SPR_setAnim(game->players[i].player_sprite,ANIM_RIGHT);
+		}
+
+		if(value[i] & BUTTON_LEFT){
+			game->players[i].x--;
+			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
+			SPR_setAnim(game->players[i].player_sprite,ANIM_LEFT);
+		}
     }
 }
 

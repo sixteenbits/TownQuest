@@ -5,8 +5,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define ANIM_VARA 0
-#define ANIM_IDLE 4
 
 // Update the state of the game
 void handlestate();
@@ -24,5 +22,7 @@ void run_stage(u16 current_stage, struct game *game);
 void init_stage(u16 current_stage, struct game *game);
 
 void inputHandler(u16,u16,u16);
+
+void readcontrollers(struct game *game);
 
 #endif
