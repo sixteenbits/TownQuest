@@ -64,8 +64,9 @@ void handlestate(struct game *game){
 	if(game->loaded_stage!=0 && game->current_stage==0) {
         game->loaded_stage=0;
         VDP_resetScreen();
-        VDP_drawText("La Vara Estudios", 10 ,13);
-        VDP_drawText("PRESENTS ...", 12 ,15);
+        u16 ind=TILE_USERINDEX;
+        VDP_setPaletteColors(PAL0, (u16*)vara.palette->data, 16);
+        VDP_drawImageEx(PLAN_A, &vara, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
     }
     if(game->loaded_stage!=1 && game->current_stage==1) {
         game->loaded_stage=1;

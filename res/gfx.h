@@ -3,5 +3,6 @@
 
 extern const Image titulo;
 extern const Image stage1;
+extern const Image vara;
 
 #endif // _RES_GFX_H_
