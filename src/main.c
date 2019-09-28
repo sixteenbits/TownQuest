@@ -72,8 +72,9 @@ void handlestate(struct game *game){
         u16 ind = TILE_USERINDEX;
         // Load tio de la vara sprite
         for(i=0; i<PLAYERS_SIZE; i++) {
-        	game->players[i].player_sprite = SPR_addSprite(&tiovara, 15, 125, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind));
+        	game->players[i].player_sprite = SPR_addSprite(&tiovara, 15, 125, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
         }
+        VDP_setPalette(PAL1,tiovara.palette->data);
         run_stage(2, game);
     }
 
