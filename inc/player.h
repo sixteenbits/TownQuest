@@ -20,7 +20,7 @@ struct player {
 	// y position
 	s16 y;
 	// Player remaining lifes
-    u8 lifes;
+    s16 lifes;
     // Current Player Score
     u16 score;
     // Player Sprite

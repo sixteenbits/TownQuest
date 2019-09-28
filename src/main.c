@@ -218,7 +218,7 @@ void init_stage(u16 current_stage, struct game *game) {
     	game->person[i].index=6+(2*(random()%2));
     	SPR_setAnim(game->person[i].person_sprite,game->person[i].index);
     }
-    game->lifes=SPR_addSprite(&vararota, 50, 300, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE,ind++));
+    game->lifes=SPR_addSprite(&vararota, 10, 180, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE,ind++));
     VDP_setPalette(PAL1,tiovara.palette->data);
     VDP_setPalette(PAL2,gente.palette->data);
     VDP_setPalette(PAL3,vararota.palette->data);
@@ -288,7 +288,7 @@ void readcontrollers(struct game *game)
 }
 
 int check_collision(struct game *game){
-	int i, j;
+	int i, j, sprite;
 	for(i=0; i<PLAYERS_SIZE; i++) {
 		for(j=0; j<ENEMY_SIZE; j++) {
 			if(game->enemies[j].enabled
@@ -303,11 +303,16 @@ int check_collision(struct game *game){
 
 		for(j=0; j<PERSON_SIZE; j++) {
 			if(game->person[j].enabled
-					&& abs(game->players[i].x-game->person[j].x) < 30
-					&& abs(game->players[i].y-game->person[j].y) < 30) {
+					&& abs(game->players[i].x-game->person[j].x) < 20
+					&& abs(game->players[i].y-game->person[j].y) < 20) {
 				SPR_setAnim(game->players[i].player_sprite, ANIM_FAIL);
 				SPR_setAnim(game->person[j].person_sprite,game->person[j].index+1);
 				game->players[i].lifes--;
+				sprite = INITIAL_LIFES-game->players[i].lifes;
+				if(sprite>2) {
+					sprite=2;
+				}
+				SPR_setAnim(game->lifes, sprite);
 				return 1;
 			}
 		}
