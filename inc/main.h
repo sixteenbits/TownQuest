@@ -5,6 +5,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define ANIM_VARA 0
+#define ANIM_IDLE 4
+
 // Update the state of the game
 void handlestate();
 // update the phisycs
@@ -19,5 +22,7 @@ void init_game_data(struct game*);
 void run_stage(u16 current_stage, struct game *game);
 
 void init_stage(u16 current_stage, struct game *game);
+
+void inputHandler(u16,u16,u16);
 
 #endif

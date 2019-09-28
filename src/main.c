@@ -12,13 +12,14 @@
 #include "sprt.h"
 
 
-
+struct game *global_game;
 
 // main program
 int main()
 {
     // Game data
     struct game game;
+    global_game = &game;
 
     // Set screen width
     VDP_setScreenWidth320();
@@ -26,6 +27,10 @@ int main()
     //Init sprite engine
     SPR_init(0, 0, 0);
     
+    // Init Controls
+    JOY_init();
+    JOY_setEventHandler(&inputHandler);
+
     // Init game data
     init_game_data(&game);
 
@@ -75,6 +80,9 @@ void handlestate(struct game *game){
         	game->players[i].player_sprite = SPR_addSprite(&tiovara, 15, 125, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
         }
         VDP_setPalette(PAL1,tiovara.palette->data);
+        for(i=0; i<PLAYERS_SIZE; i++) {
+        	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
+        }
         run_stage(2, game);
     }
 
@@ -116,5 +124,12 @@ void init_game_data(struct game *game){
     game->background=NULL;
     game->current_stage=0;
     game->loaded_stage=-1;
+}
+
+void inputHandler(u16 joy, u16 state, u16 changed)
+{
+	if (changed & state & BUTTON_A) {
+		SPR_setAnim(global_game->players[joy].player_sprite,ANIM_VARA);
+    }
 }
 
