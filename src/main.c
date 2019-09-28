@@ -87,7 +87,11 @@ void handlestate(struct game *game){
         for(i=0; i<PLAYERS_SIZE; i++) {
         	game->players[i].player_sprite = SPR_addSprite(&tiovara, game->players[i].x, game->players[i].y, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
         }
+        for(i=0; i<ENEMY_SIZE; i++) {
+            game->enemies[i].enemy_sprite = SPR_addSprite(&gente, game->enemies[i].x, game->enemies[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
+        }
         VDP_setPalette(PAL1,tiovara.palette->data);
+        VDP_setPalette(PAL2,gente.palette->data);
         for(i=0; i<PLAYERS_SIZE; i++) {
         	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
         }
@@ -124,8 +128,8 @@ void init_stage(u16 current_stage, struct game *game) {
     	game->players[i].end_varazo_frame=0;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
-		game->enemies[i].y = 0;
-		game->enemies[i].x = 0;
+		game->enemies[i].y = 50;
+		game->enemies[i].x = 50;
 		game->enemies[i].vy = -10;
 		game->enemies[i].enabled = 1;
 	}
