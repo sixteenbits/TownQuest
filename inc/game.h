@@ -1,4 +1,7 @@
 #include <genesis.h>
+#include "player.h"
+#include "enemy.h"
+#include "person.h"
 
 
 #ifndef GAME_H
