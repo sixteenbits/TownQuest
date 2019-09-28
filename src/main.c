@@ -169,11 +169,13 @@ void readcontrollers(struct game *game)
 			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
 			SPR_setAnim(game->players[i].player_sprite,ANIM_RIGHT);
 		}
-
-		if(value[i] & BUTTON_LEFT){
+		else if(value[i] & BUTTON_LEFT){
 			game->players[i].x--;
 			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
 			SPR_setAnim(game->players[i].player_sprite,ANIM_LEFT);
+		}
+		else if(!game->players[i].end_varazo_frame) {
+			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
 		}
     }
 }
