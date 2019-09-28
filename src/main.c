@@ -294,6 +294,7 @@ int check_collision(struct game *game){
 					&& abs(game->players[i].x-game->person[j].x) < 30
 					&& abs(game->players[i].y-game->person[j].y) < 30) {
 				SPR_setAnim(game->players[i].player_sprite, ANIM_FAIL);
+				SPR_setAnim(game->person[j].person_sprite,game->person[j].index+1);
 				game->players[i].lifes--;
 				return 1;
 			}
