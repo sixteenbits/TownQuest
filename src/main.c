@@ -61,7 +61,6 @@ int main()
 
 //hadle the game state
 void handlestate(struct game *game){
-    int i;
 	if(game->loaded_stage!=0 && game->current_stage==0) {
         game->loaded_stage=0;
         VDP_resetScreen();
@@ -80,32 +79,6 @@ void handlestate(struct game *game){
     if(game->loaded_stage!=2 && game->current_stage==2) {
         game->loaded_stage=2;
         init_stage(game->loaded_stage, game);
-        VDP_resetScreen();
-        //Indice para pdoer saber la carga
-        u16 ind = TILE_USERINDEX;
-
-
-        // Load Background
-        VDP_setPaletteColors(PAL0, (u16*)stage1.palette->data, 16);
-        VDP_drawImageEx(PLAN_A, &stage1, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
-
-
-        // Load tio de la vara sprite
-        for(i=0; i<PLAYERS_SIZE; i++) {
-        	game->players[i].player_sprite = SPR_addSprite(&tiovara, game->players[i].x, game->players[i].y, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
-        }
-        for(i=0; i<ENEMY_SIZE; i++) {
-            game->enemies[i].enemy_sprite = SPR_addSprite(&gente, game->enemies[i].x, game->enemies[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
-        }
-        for(i=0; i<PERSON_SIZE; i++) {
-            game->person[i].person_sprite = SPR_addSprite(&gente, game->person[i].x, game->person[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
-            SPR_setAnim(game->person[i].person_sprite,2+random()%2);
-        }
-        VDP_setPalette(PAL1,tiovara.palette->data);
-        VDP_setPalette(PAL2,gente.palette->data);
-        for(i=0; i<PLAYERS_SIZE; i++) {
-        	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
-        }
     }
     if(game->loaded_stage>=2 && game->loaded_stage==game->current_stage) {
         run_stage(game->loaded_stage, game);
@@ -148,14 +121,14 @@ void init_stage(u16 current_stage, struct game *game) {
     	game->players[i].end_varazo_frame=0;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
-		game->enemies[i].y = -1*random()%300;
+		game->enemies[i].y = -1*random()%500;
 		game->enemies[i].x = random()%300;
 		game->enemies[i].vy = 1;
 		game->enemies[i].enabled = 1;
 	}
 
 	for(i=0; i<PERSON_SIZE; i++) {
-		game->person[i].y = -1*random()%300;
+		game->person[i].y = -1*random()%500;
 		game->person[i].x = random()%300;
 		game->person[i].vy = 1;
 		game->person[i].enabled = 1;
@@ -169,6 +142,31 @@ void init_stage(u16 current_stage, struct game *game) {
 			game->person[i].x = positions_s2[random()%3];
 		}
 	}
+
+	VDP_resetScreen();
+	//Indice para pdoer saber la carga
+	u16 ind = TILE_USERINDEX;
+
+    // Load Background
+    VDP_setPaletteColors(PAL0, (u16*)stage1.palette->data, 16);
+    VDP_drawImageEx(PLAN_A, &stage1, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
+
+    // Load tio de la vara sprite
+    for(i=0; i<PLAYERS_SIZE; i++) {
+    	game->players[i].player_sprite = SPR_addSprite(&tiovara, game->players[i].x, game->players[i].y, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE,ind++));
+    }
+    for(i=0; i<ENEMY_SIZE; i++) {
+    	game->enemies[i].enemy_sprite = SPR_addSprite(&gente, game->enemies[i].x, game->enemies[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
+    }
+    for(i=0; i<PERSON_SIZE; i++) {
+    	game->person[i].person_sprite = SPR_addSprite(&gente, game->person[i].x, game->person[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
+    	SPR_setAnim(game->person[i].person_sprite,2+random()%2);
+    }
+    VDP_setPalette(PAL1,tiovara.palette->data);
+    VDP_setPalette(PAL2,gente.palette->data);
+    for(i=0; i<PLAYERS_SIZE; i++) {
+    	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
+    }
 }
 
 // update the phisycs positions
