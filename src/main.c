@@ -1,16 +1,49 @@
 /**
- * Hello World Example
- * Created With Genesis-Code for extension for Visual Studio Code
- * Use "Genesis Code: Compile" command to compile this program.
+ * TonwQuest main program.
+ * Sixteen Bits.
  **/
 #include <genesis.h>
 
+#include "game.h"
+#include "person.h"
+#include "player.h"
+#include "enemy.h"
+
+// Update the state of the game
+void handlestate();
+// update the phisycs
+void updatephisycs();
+//handle the input controls
+void handleinput();
+
+struct game game;
+// main program
 int main()
 {
-    VDP_drawText("Hello Sega!!", 10,13);
+    
     while(1)
     {
+
+        handlestate();
+
+        updatephisycs();
+        handleinput();
+        SPR_update();
         VDP_waitVSync();
     }
     return (0);
+}
+
+//hadle the game state
+void handlestate(){
+    game
+}
+// update the phisycs positions
+void updatephisycs(){
+
+}
+
+// handle the input controllers
+void handleinput(){
+
 }
