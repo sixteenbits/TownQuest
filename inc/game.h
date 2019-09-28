@@ -10,6 +10,7 @@
 #define PLAYERS_SIZE 1
 #define ENEMY_SIZE 10
 #define PERSON_SIZE 10
+#define SCREEN_HEIGHT 224
 
 struct game {
     // Backgrounds
