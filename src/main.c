@@ -12,20 +12,26 @@
 
 
 
-struct game game;
+
 // main program
 int main()
 {
-    //Inicializa motor de sprites con los parámetros por defecto
+    // Game data
+    struct game game;
+
+    //Init sprite engine
     SPR_init(0, 0, 0);
     
+    // Init game data
+    init_game_data(&game);
+
     while(1)
     {
         // Update Game
         updatephisycs();
 
         // Handle state, draw screen
-        handlestate();
+        handlestate(&game);
 
         // Handle controllers input
         handleinput();
@@ -39,8 +45,14 @@ int main()
 }
 
 //hadle the game state
-void handlestate(){
-    VDP_drawText("Hello Town Quest", 10 ,13);
+void handlestate(struct game *game){
+    if(game->current_stage==0) {
+        VDP_drawText("La Vara Estudios", 10 ,13);
+        VDP_drawText("PRESENTS ...", 10 ,15);
+    }
+    if(game->current_stage==1) {
+        VDP_drawText("Hello Town Quest", 10 ,13);
+    }
 }
 // update the phisycs positions
 void updatephisycs(){
@@ -51,3 +63,10 @@ void updatephisycs(){
 void handleinput(){
 
 }
+
+void init_game_data(struct game *game){
+    game->background=NULL;
+    game->current_stage=0;
+    game->loaded_stage=-1;
+}
+

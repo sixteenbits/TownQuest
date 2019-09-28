@@ -1,4 +1,5 @@
 #include <genesis.h>
+#include "game.h"
 
 
 #ifndef MAIN_H
@@ -10,5 +11,8 @@ void handlestate();
 void updatephisycs();
 //handle the input controls
 void handleinput();
+
+// Init game data
+void init_game_data(struct game*);
 
 #endif
