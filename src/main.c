@@ -108,8 +108,9 @@ void handlestate(struct game *game){
 void run_stage(u16 current_stage, struct game *game) {
 	int i;
 	for(i=0; i<PLAYERS_SIZE; i++) {
-		if(game->frame > game->players[i].end_varazo_frame) {
+		if(game->players[i].end_varazo_frame && game->frame > game->players[i].end_varazo_frame) {
 			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
+			game->players[i].end_varazo_frame=0;
 		}
 	}
     VDP_drawText("Fight!", 10 ,13);
@@ -120,6 +121,7 @@ void init_stage(u16 current_stage, struct game *game) {
 	for(i=0; i<PLAYERS_SIZE; i++) {
 		game->players[i].y = 160;
 		game->players[i].x = 150;
+    	game->players[i].end_varazo_frame=0;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y = 0;
@@ -140,14 +142,14 @@ void handleinput(){
 }
 
 void init_game_data(struct game *game){
-    game->background=NULL;
+	game->background=NULL;
     game->current_stage=0;
     game->loaded_stage=-1;
 }
 
 void inputHandler(u16 joy, u16 state, u16 changed)
 {
-	if (changed & state /*& BUTTON_A*/) {
+	if (state & BUTTON_A) {
 		SPR_setAnim(global_game->players[joy].player_sprite,ANIM_VARA);
 		global_game->players[joy].end_varazo_frame = global_game->frame+VARAZO_DURATION;
     }
