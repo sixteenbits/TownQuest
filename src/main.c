@@ -117,6 +117,10 @@ void run_stage(u16 current_stage, struct game *game) {
 			game->players[i].end_varazo_frame=0;
 		}
 	}
+	for(i=0; i<ENEMY_SIZE; i++) {
+		game->enemies[i].y+=game->enemies[i].vy;
+		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
+	}
     VDP_drawText("Fight!", 10 ,13);
 }
 
@@ -130,7 +134,7 @@ void init_stage(u16 current_stage, struct game *game) {
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y = 50;
 		game->enemies[i].x = 50;
-		game->enemies[i].vy = -10;
+		game->enemies[i].vy = 1;
 		game->enemies[i].enabled = 1;
 	}
 }
