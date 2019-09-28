@@ -98,18 +98,30 @@ void handlestate(struct game *game){
 void run_stage(u16 current_stage, struct game *game) {
 	int i;
 	for(i=0; i<PLAYERS_SIZE; i++) {
+		// Varazo ends
 		if(game->players[i].end_varazo_frame && game->frame > game->players[i].end_varazo_frame) {
 			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
 			game->players[i].end_varazo_frame=0;
 		}
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
+		// Update enemy position
 		game->enemies[i].y+=game->enemies[i].vy;
+		// If out of screen, reset position
 		if(game->enemies[i].y>SCREEN_HEIGHT) {
-			game->enemies[i].y = -1*random()%500;
+			// If still alive, reset position
+			if(game->enemies[i].enabled) {
+				game->enemies[i].y = -1*random()%500;
+			}
+			// If dead, remove sprite
+			else {
+				SPR_releaseSprite(game->enemies[i].enemy_sprite);
+				game->enemies[i].enemy_sprite=NULL;
+			}
 		}
 		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
 	}
+
 	for(i=0; i<PERSON_SIZE; i++) {
 		game->person[i].y+=game->person[i].vy;
 		SPR_setPosition(game->person[i].person_sprite, game->person[i].x, game->person[i].y);
