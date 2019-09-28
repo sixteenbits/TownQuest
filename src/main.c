@@ -128,7 +128,15 @@ void run_stage(u16 current_stage, struct game *game) {
 			game->enemies[i].enemy_sprite=NULL;
 			game->enemies[i].enabled=0;
 		}
-		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
+		else {
+			SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
+
+			// Varazo ends
+			if(game->enemies[i].end_transform && game->frame > game->enemies[i].end_transform) {
+				SPR_setAnim(game->players[i].player_sprite,TRANSFORMED_SPRITE);
+				game->enemies[i].end_transform=0;
+			}
+		}
 	}
 
 	// Update persons
@@ -162,6 +170,7 @@ void init_stage(u16 current_stage, struct game *game) {
 		game->enemies[i].x = random()%300;
 		game->enemies[i].vy = 1;
 		game->enemies[i].enabled = 1;
+		game->enemies[i].end_transform = 0;
 	}
 
 	for(i=0; i<PERSON_SIZE; i++) {
@@ -285,6 +294,7 @@ int check_collision(struct game *game){
 						&& abs(game->players[i].y-game->enemies[j].y) < 30) {
 				game->enemies[j].enabled=0;
 				SPR_setAnim(game->enemies[j].enemy_sprite,game->enemies[j].index+1);
+				game->enemies[j].end_transform=game->frame+TRANSFORMATION_DURATION;
 				return 1;
 			}
 		}

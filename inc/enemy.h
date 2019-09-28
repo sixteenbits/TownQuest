@@ -4,6 +4,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+#define TRANSFORMATION_DURATION 15
+#define TRANSFORMED_SPRITE 10
+
 struct enemy {
     // x position
     s16 x;
@@ -17,6 +20,8 @@ struct enemy {
     bool enabled;
     // Enemy index
     u16 index;
+    // End transformation
+    u16 end_transform;
 };
 
 #endif
