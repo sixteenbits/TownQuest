@@ -62,8 +62,8 @@ int main()
 
 //hadle the game state
 void handlestate(struct game *game){
-	if(game->game_over) {
-		game->loaded_stage=0;
+	if(game->loaded_stage!=10 && game->current_stage==10) {
+		game->loaded_stage=10;
 		VDP_resetScreen();
 		u16 ind=TILE_USERINDEX;
 		VDP_setPaletteColors(PAL0, (u16*)game_over.palette->data, 16);
@@ -86,11 +86,11 @@ void handlestate(struct game *game){
         VDP_drawText("Town Quest", 3 ,5);
     }
 
-    if(game->loaded_stage!=2 && game->current_stage==2) {
+    if(game->loaded_stage!=2 && game->loaded_stage<10 && game->current_stage==2) {
         game->loaded_stage=2;
         init_stage(game->loaded_stage, game);
     }
-    if(game->loaded_stage>=2 && game->loaded_stage==game->current_stage) {
+    if(game->loaded_stage>=2 && game->loaded_stage<10 && game->loaded_stage==game->current_stage) {
         run_stage(game->loaded_stage, game);
     }
 
@@ -100,6 +100,9 @@ void handlestate(struct game *game){
     }
     else if(game->current_stage==1 && game->frame > 600) {
         game->current_stage++;
+    }
+    else if(game->game_over && game->loaded_stage!=10) {
+    	game->current_stage=10;
     }
 }
 
@@ -112,7 +115,7 @@ void run_stage(u16 current_stage, struct game *game) {
 			game->players[i].end_varazo_frame=0;
 		}
 		if(game->players[i].lifes<=0) {
-			game->game_over=1;
+			//game->game_over=1;
 		}
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
@@ -120,15 +123,10 @@ void run_stage(u16 current_stage, struct game *game) {
 		game->enemies[i].y+=game->enemies[i].vy;
 		// If out of screen, reset position
 		if(game->enemies[i].y>SCREEN_HEIGHT) {
-			// If still alive, reset position
-			if(game->enemies[i].enabled) {
-				game->enemies[i].y = -1*random()%500;
-			}
-			// If dead, remove sprite
-			else {
-				SPR_releaseSprite(game->enemies[i].enemy_sprite);
-				game->enemies[i].enemy_sprite=NULL;
-			}
+			// remove sprite
+			SPR_releaseSprite(game->enemies[i].enemy_sprite);
+			game->enemies[i].enemy_sprite=NULL;
+			game->enemies[i].enabled=0;
 		}
 		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
 	}
@@ -234,6 +232,9 @@ void init_game_data(struct game *game){
 
 void inputHandler(u16 joy, u16 state, u16 changed)
 {
+	if(global_game->game_over) {
+		return;
+	}
 	if (state & (BUTTON_A | BUTTON_B | BUTTON_C)) {
 		SPR_setAnim(global_game->players[joy].player_sprite,ANIM_VARA);
 		global_game->players[joy].end_varazo_frame = global_game->frame+VARAZO_DURATION;
