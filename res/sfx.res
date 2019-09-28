@@ -1,2 +1,2 @@
-WAV fallo "fallo.wav" 0 22050
+WAV fallo "fallo.wav" XGM
 XGM fondo1 "musicafondo.vgm" AUTO
