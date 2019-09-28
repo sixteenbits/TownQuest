@@ -10,6 +10,7 @@
 #include "enemy.h"
 #include "main.h"
 #include "sprt.h"
+#include "gfx.h"
 
 
 struct game *global_game;
@@ -70,7 +71,10 @@ void handlestate(struct game *game){
     if(game->loaded_stage!=1 && game->current_stage==1) {
         game->loaded_stage=1;
         VDP_resetScreen();
-        VDP_drawText("Town Quest", 10 ,13);
+        u16 ind=TILE_USERINDEX;
+        VDP_setPaletteColors(PAL0, (u16*)titulo.palette->data, 16);
+        VDP_drawImageEx(PLAN_A, &titulo, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
+        VDP_drawText("Town Quest", 3 ,5);
     }
 
     if(game->loaded_stage!=2 && game->current_stage==2) {

@@ -7,7 +7,9 @@
 #define ANIM_VARA 0
 #define ANIM_RIGHT 1
 #define ANIM_LEFT 2
-#define ANIM_IDLE 4
+#define ANIM_VICTORY 4
+#define ANIM_IDLE 5
+
 #define VARAZO_DURATION 15
 
 struct player {
