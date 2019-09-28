@@ -15,6 +15,8 @@ struct person {
     Sprite* person_sprite;
     // Enemy active
     bool enabled;
+    // Enemy index
+    u16 index;
 };
 
 #endif

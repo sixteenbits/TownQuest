@@ -202,10 +202,13 @@ void init_stage(u16 current_stage, struct game *game) {
     }
     for(i=0; i<ENEMY_SIZE; i++) {
     	game->enemies[i].enemy_sprite = SPR_addSprite(&gente, game->enemies[i].x, game->enemies[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
+    	game->enemies[i].index=2*(random()%3);
+    	SPR_setAnim(game->enemies[i].enemy_sprite,game->enemies[i].index);
     }
     for(i=0; i<PERSON_SIZE; i++) {
     	game->person[i].person_sprite = SPR_addSprite(&gente, game->person[i].x, game->person[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
-    	SPR_setAnim(game->person[i].person_sprite,6+(2*(random()%2)));
+    	game->person[i].index=6+(2*(random()%2));
+    	SPR_setAnim(game->person[i].person_sprite,game->person[i].index);
     }
     VDP_setPalette(PAL1,tiovara.palette->data);
     VDP_setPalette(PAL2,gente.palette->data);
@@ -281,7 +284,7 @@ int check_collision(struct game *game){
 						&& abs(game->players[i].x-game->enemies[j].x) < 30
 						&& abs(game->players[i].y-game->enemies[j].y) < 30) {
 				game->enemies[j].enabled=0;
-				SPR_setAnim(game->enemies[j].enemy_sprite,ENEMY_ANIM_HIT);
+				SPR_setAnim(game->enemies[j].enemy_sprite,game->enemies[j].index+1);
 				return 1;
 			}
 		}
