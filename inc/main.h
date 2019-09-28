@@ -15,4 +15,7 @@ void handleinput();
 // Init game data
 void init_game_data(struct game*);
 
+// Run game stage
+void run_stage(u16 current_stage);
+
 #endif

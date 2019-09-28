@@ -62,8 +62,7 @@ void handlestate(struct game *game){
 
     if(game->loaded_stage!=2 && game->current_stage==2) {
         game->loaded_stage=2;
-        VDP_resetScreen();
-        VDP_drawText("Fight!", 10 ,13);
+        run_stage(2);
     }
 
     // Change State
@@ -74,6 +73,12 @@ void handlestate(struct game *game){
         game->current_stage++;
     }
 }
+
+void run_stage(u16 current_stage) {
+    VDP_resetScreen();
+    VDP_drawText("Fight!", 10 ,13);
+}
+
 // update the phisycs positions
 void updatephisycs(){
 
