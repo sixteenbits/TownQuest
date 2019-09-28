@@ -6,9 +6,9 @@
 
 struct enemy {
     // x position
-    u16 x;
+    s16 x;
     // y position
-    u16 y;
+    s16 y;
     // Player Sprite
     Sprite* enemy_sprite;
     // Enemy active
