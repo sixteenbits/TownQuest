@@ -23,12 +23,18 @@ int main()
     
     while(1)
     {
+        // Update Game
+        updatephisycs();
 
+        // Handle state, draw screen
         handlestate();
 
-        updatephisycs();
+        // Handle controllers input
         handleinput();
+
+        // Print Screen
         SPR_update();
+        // Wait until next frame
         VDP_waitVSync();
     }
     return (0);
