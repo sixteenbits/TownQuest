@@ -5,6 +5,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define SFX_FAIL 1
 
 // Update the state of the game
 void handlestate();
