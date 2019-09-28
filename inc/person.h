@@ -9,6 +9,8 @@ struct person {
     s16 x;
     // y position
     s16 y;
+    // vertical speed
+    s16 vy;
     // Person Sprite
     Sprite* person_sprite;
     // Enemy active

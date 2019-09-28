@@ -97,6 +97,10 @@ void handlestate(struct game *game){
         for(i=0; i<ENEMY_SIZE; i++) {
             game->enemies[i].enemy_sprite = SPR_addSprite(&gente, game->enemies[i].x, game->enemies[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
         }
+        for(i=0; i<PERSON_SIZE; i++) {
+            game->person[i].person_sprite = SPR_addSprite(&gente, game->person[i].x, game->person[i].y, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind++));
+            SPR_setAnim(game->person[i].person_sprite,2+random()%2);
+        }
         VDP_setPalette(PAL1,tiovara.palette->data);
         VDP_setPalette(PAL2,gente.palette->data);
         for(i=0; i<PLAYERS_SIZE; i++) {
@@ -128,6 +132,10 @@ void run_stage(u16 current_stage, struct game *game) {
 		game->enemies[i].y+=game->enemies[i].vy;
 		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
 	}
+	for(i=0; i<PERSON_SIZE; i++) {
+		game->person[i].y+=game->person[i].vy;
+		SPR_setPosition(game->person[i].person_sprite, game->person[i].x, game->person[i].y);
+	}
 }
 
 void init_stage(u16 current_stage, struct game *game) {
@@ -146,9 +154,19 @@ void init_stage(u16 current_stage, struct game *game) {
 		game->enemies[i].enabled = 1;
 	}
 
+	for(i=0; i<PERSON_SIZE; i++) {
+		game->person[i].y = -1*random()%300;
+		game->person[i].x = random()%300;
+		game->person[i].vy = 1;
+		game->person[i].enabled = 1;
+	}
+
 	if(current_stage == 2) {
 		for(i=0; i<ENEMY_SIZE; i++) {
 			game->enemies[i].x = positions_s2[random()%3];
+		}
+		for(i=0; i<PERSON_SIZE; i++) {
+			game->person[i].x = positions_s2[random()%3];
 		}
 	}
 }
