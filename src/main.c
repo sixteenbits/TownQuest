@@ -132,7 +132,7 @@ void run_stage(u16 current_stage, struct game *game) {
 
 			// Varazo ends
 			if(game->enemies[i].end_transform && game->frame > game->enemies[i].end_transform) {
-				SPR_setAnim(game->players[i].player_sprite,TRANSFORMED_SPRITE);
+				SPR_setAnim(game->enemies[i].enemy_sprite,TRANSFORMED_SPRITE);
 				game->enemies[i].end_transform=0;
 			}
 		}
