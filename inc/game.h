@@ -29,6 +29,8 @@ struct game {
     u16 frame;
     // Flag game over
     int game_over;
+    // sprite vidas
+    Sprite *lifes;
 };
 
 #endif

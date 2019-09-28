@@ -218,8 +218,10 @@ void init_stage(u16 current_stage, struct game *game) {
     	game->person[i].index=6+(2*(random()%2));
     	SPR_setAnim(game->person[i].person_sprite,game->person[i].index);
     }
+    game->lifes=SPR_addSprite(&vararota, 50, 300, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE,ind++));
     VDP_setPalette(PAL1,tiovara.palette->data);
     VDP_setPalette(PAL2,gente.palette->data);
+    VDP_setPalette(PAL3,vararota.palette->data);
     for(i=0; i<PLAYERS_SIZE; i++) {
     	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
     }
@@ -239,6 +241,7 @@ void init_game_data(struct game *game){
 	game->background=NULL;
     game->current_stage=0;
     game->loaded_stage=-1;
+    game->game_over=0;
 }
 
 void inputHandler(u16 joy, u16 state, u16 changed)
