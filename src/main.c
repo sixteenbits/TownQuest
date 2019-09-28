@@ -105,6 +105,9 @@ void run_stage(u16 current_stage, struct game *game) {
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y+=game->enemies[i].vy;
+		if(game->enemies[i].y>SCREEN_HEIGHT) {
+			game->enemies[i].y = -1*random()%500;
+		}
 		SPR_setPosition(game->enemies[i].enemy_sprite, game->enemies[i].x, game->enemies[i].y);
 	}
 	for(i=0; i<PERSON_SIZE; i++) {
@@ -237,8 +240,8 @@ int check_collision(struct game *game){
 	for(i=0; i<PLAYERS_SIZE; i++) {
 		for(j=0; j<ENEMY_SIZE; j++) {
 			if(game->enemies[j].enabled
-						&& abs(game->players[i].x-game->enemies[j].x) < 25
-						&& abs(game->players[i].y-game->enemies[j].y) < 25) {
+						&& abs(game->players[i].x-game->enemies[j].x) < 30
+						&& abs(game->players[i].y-game->enemies[j].y) < 30) {
 				game->enemies[j].enabled=0;
 				SPR_setAnim(game->enemies[j].enemy_sprite,ENEMY_ANIM_HIT);
 				return 1;
