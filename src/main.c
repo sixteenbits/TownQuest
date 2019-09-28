@@ -27,6 +27,8 @@ int main()
 
     while(1)
     {
+        // Update frame counter
+        game.frame++;
         // Update Game
         updatephisycs();
 
@@ -51,7 +53,19 @@ void handlestate(struct game *game){
         VDP_drawText("PRESENTS ...", 10 ,15);
     }
     if(game->current_stage==1) {
-        VDP_drawText("Hello Town Quest", 10 ,13);
+        VDP_drawText("Town Quest", 10 ,13);
+    }
+
+    if(game->current_stage==2) {
+        VDP_drawText("First round!", 10 ,13);
+    }
+
+    // Change State
+    if(game->current_stage==0 && game->frame > 100) {
+        game->current_stage++;
+    }
+    else if(game->current_stage==1 && game->frame > 200) {
+        game->current_stage++;
     }
 }
 // update the phisycs positions
