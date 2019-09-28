@@ -11,6 +11,7 @@
 #include "main.h"
 #include "sprt.h"
 #include "gfx.h"
+#include "sfx.h"
 
 
 struct game *global_game;
@@ -147,7 +148,12 @@ void init_stage(u16 current_stage, struct game *game) {
 	VDP_resetScreen();
 	//Indice para pdoer saber la carga
 	u16 ind = TILE_USERINDEX;
-
+    //init sounds
+    SND_setPCM_XGM(SFX_FAIL, fallo, sizeof(fallo));
+    //init music
+    SYS_disableInts();
+    SND_startPlay_XGM(fondo1);
+    SYS_enableInts();
     // Load Background
     VDP_setPaletteColors(PAL0, (u16*)stage1.palette->data, 16);
     VDP_drawImageEx(PLAN_A, &stage1, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
@@ -196,6 +202,7 @@ void inputHandler(u16 joy, u16 state, u16 changed)
 		}
 		else {
 			// Play EMPTY sound
+            SND_startPlayPCM_XGM(SFX_FAIL, 1, SOUND_PCM_CH2);
 		}
     }
 }
