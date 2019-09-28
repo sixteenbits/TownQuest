@@ -48,23 +48,29 @@ int main()
 
 //hadle the game state
 void handlestate(struct game *game){
-    if(game->current_stage==0) {
+    if(game->loaded_stage!=0 && game->current_stage==0) {
+        game->loaded_stage=0;
+        VDP_resetScreen();
         VDP_drawText("La Vara Estudios", 10 ,13);
         VDP_drawText("PRESENTS ...", 10 ,15);
     }
-    if(game->current_stage==1) {
+    if(game->loaded_stage!=1 && game->current_stage==1) {
+        game->loaded_stage=1;
+        VDP_resetScreen();
         VDP_drawText("Town Quest", 10 ,13);
     }
 
-    if(game->current_stage==2) {
-        VDP_drawText("First round!", 10 ,13);
+    if(game->loaded_stage!=2 && game->current_stage==2) {
+        game->loaded_stage=2;
+        VDP_resetScreen();
+        VDP_drawText("Fight!", 10 ,13);
     }
 
     // Change State
-    if(game->current_stage==0 && game->frame > 100) {
+    if(game->current_stage==0 && game->frame > 400) {
         game->current_stage++;
     }
-    else if(game->current_stage==1 && game->frame > 200) {
+    else if(game->current_stage==1 && game->frame > 600) {
         game->current_stage++;
     }
 }
