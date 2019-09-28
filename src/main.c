@@ -191,6 +191,12 @@ void inputHandler(u16 joy, u16 state, u16 changed)
 	if (state & (BUTTON_A | BUTTON_B | BUTTON_C)) {
 		SPR_setAnim(global_game->players[joy].player_sprite,ANIM_VARA);
 		global_game->players[joy].end_varazo_frame = global_game->frame+VARAZO_DURATION;
+		if(check_collision(global_game)) {
+			// Play HIT sound
+		}
+		else {
+			// Play EMPTY sound
+		}
     }
 }
 
@@ -217,5 +223,9 @@ void readcontrollers(struct game *game)
 			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
 		}
     }
+}
+
+int check_collision(global_game){
+	return 0;
 }
 

@@ -25,4 +25,6 @@ void inputHandler(u16,u16,u16);
 
 void readcontrollers(struct game *game);
 
+int check_collision(global_game);
+
 #endif
