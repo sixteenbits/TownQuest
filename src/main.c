@@ -9,6 +9,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "main.h"
+#include "sprt.h"
 
 
 
@@ -18,6 +19,9 @@ int main()
 {
     // Game data
     struct game game;
+
+    // Set screen width
+    VDP_setScreenWidth320();
 
     //Init sprite engine
     SPR_init(0, 0, 0);
@@ -48,7 +52,8 @@ int main()
 
 //hadle the game state
 void handlestate(struct game *game){
-    if(game->loaded_stage!=0 && game->current_stage==0) {
+    int i;
+	if(game->loaded_stage!=0 && game->current_stage==0) {
         game->loaded_stage=0;
         VDP_resetScreen();
         VDP_drawText("La Vara Estudios", 10 ,13);
@@ -62,7 +67,14 @@ void handlestate(struct game *game){
 
     if(game->loaded_stage!=2 && game->current_stage==2) {
         game->loaded_stage=2;
-        run_stage(2);
+        VDP_resetScreen();
+        //Indice para pdoer saber la carga
+        u16 ind = TILE_USERINDEX;
+        // Load tio de la vara sprite
+        for(i=0; i<PLAYERS_SIZE; i++) {
+        	game->players[i].player_sprite = SPR_addSprite(&tiovara, 15, 125, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE,ind));
+        }
+        run_stage(2, game);
     }
 
     // Change State
@@ -74,9 +86,19 @@ void handlestate(struct game *game){
     }
 }
 
-void run_stage(u16 current_stage) {
-    VDP_resetScreen();
+void run_stage(u16 current_stage, struct game *game) {
+
     VDP_drawText("Fight!", 10 ,13);
+}
+
+void init_stage(u16 current_stage, struct game *game) {
+	int i;
+	for(i=0; i<ENEMY_SIZE; i++) {
+		game->enemies[i].y = 0;
+		game->enemies[i].x = 0;
+		game->enemies[i].vy = -10;
+		game->enemies[i].enabled = 1;
+	}
 }
 
 // update the phisycs positions
