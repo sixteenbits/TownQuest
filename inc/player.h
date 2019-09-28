@@ -7,6 +7,7 @@
 #define ANIM_VARA 0
 #define ANIM_RIGHT 1
 #define ANIM_LEFT 2
+#define ANIM_FAIL 3
 #define ANIM_VICTORY 4
 #define ANIM_IDLE 5
 
