@@ -225,7 +225,20 @@ void readcontrollers(struct game *game)
     }
 }
 
-int check_collision(global_game){
+int check_collision(struct game *game){
+	int i, j;
+	for(i=0; i<PLAYERS_SIZE; i++) {
+		for(j=0; j<ENEMY_SIZE; j++) {
+			if(game->enemies[j].enabled
+						&& abs(game->players[i].x-game->enemies[j].x) < 25
+						&& abs(game->players[i].y-game->enemies[j].y) < 25) {
+				game->enemies[j].enabled=0;
+				SPR_setAnim(game->enemies[j].enemy_sprite,ENEMY_ANIM_HIT);
+				return 1;
+			}
+		}
+	}
+
 	return 0;
 }
 

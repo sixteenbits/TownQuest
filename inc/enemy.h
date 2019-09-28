@@ -4,6 +4,8 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+#define ENEMY_ANIM_HIT 1
+
 struct enemy {
     // x position
     s16 x;
