@@ -75,7 +75,6 @@ void handlestate(struct game *game){
         u16 ind=TILE_USERINDEX;
         VDP_setPaletteColors(PAL0, (u16*)titulo.palette->data, 16);
         VDP_drawImageEx(PLAN_A, &titulo, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
-        VDP_drawText("Town Quest", 3 ,5);
     }
 
     if(game->loaded_stage!=2 && game->current_stage==2) {
