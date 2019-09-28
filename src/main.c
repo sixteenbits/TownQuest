@@ -83,6 +83,8 @@ void handlestate(struct game *game){
         for(i=0; i<PLAYERS_SIZE; i++) {
         	SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
         }
+    }
+    if(game->loaded_stage==2 && game->current_stage==2) {
         run_stage(2, game);
     }
 
@@ -96,7 +98,12 @@ void handlestate(struct game *game){
 }
 
 void run_stage(u16 current_stage, struct game *game) {
-
+	int i;
+	for(i=0; i<PLAYERS_SIZE; i++) {
+		if(game->frame > game->players[i].end_varazo_frame) {
+			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
+		}
+	}
     VDP_drawText("Fight!", 10 ,13);
 }
 
@@ -130,6 +137,7 @@ void inputHandler(u16 joy, u16 state, u16 changed)
 {
 	if (changed & state & BUTTON_A) {
 		SPR_setAnim(global_game->players[joy].player_sprite,ANIM_VARA);
+		global_game->players[joy].end_varazo_frame = global_game->frame+VARAZO_DURATION;
     }
 }
 
