@@ -6,6 +6,8 @@
 #define MAIN_H
 
 #define SFX_FAIL 64
+#define SFX_HIT 65
+#define SFX_START 66
 
 // Update the state of the game
 void handlestate();

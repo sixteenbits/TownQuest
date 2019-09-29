@@ -34,6 +34,8 @@ struct game {
     Sprite *lifes;
     u16 change_stage;
     int victory;
+    int play_empty_sound;
+    int play_hit_sound;
 };
 
 #endif

@@ -84,6 +84,11 @@ void handlestate(struct game *game){
         u16 ind=TILE_USERINDEX;
         VDP_setPaletteColors(PAL0, (u16*)titulo.palette->data, 16);
         VDP_drawImageEx(PLAN_A, &titulo, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
+		SYS_disableInts();
+		SND_setPCM_XGM(SFX_START, start, sizeof(start));
+		SYS_enableInts();
+		SND_startPlayPCM_XGM(SFX_START,1,SOUND_PCM_CH2);
+
     }
 
     if(game->current_stage>=2 && game->current_stage<10 && game->loaded_stage!=game->current_stage) {
@@ -150,6 +155,14 @@ void run_stage(u16 current_stage, struct game *game) {
 		if(game->enemies[i].enabled==1) {
 			victory=0;
 		}
+	}
+	if(game->play_empty_sound){
+		game->play_empty_sound=0;
+		SND_startPlayPCM_XGM(SFX_FAIL,1,SOUND_PCM_CH2);
+	}
+	if(game->play_hit_sound){
+		game->play_hit_sound=0;
+		SND_startPlayPCM_XGM(SFX_HIT,1, SOUND_PCM_CH3);
 	}
 	if(victory) {
 		game->victory=1;
@@ -220,8 +233,8 @@ void init_stage(u16 current_stage, struct game *game) {
      SYS_disableInts();
     //init sounds
     SND_setPCM_XGM(SFX_FAIL, fallo, sizeof(fallo));
+	SND_setPCM_XGM(SFX_HIT, hit, sizeof(hit));
     //init music
-   
     XGM_startPlay(fondo1);
     
     SYS_enableInts();
@@ -270,6 +283,9 @@ void init_game_data(struct game *game){
     game->game_over=0;
     game->change_stage=0;
     game->victory=0;
+	game->play_empty_sound=0;
+	game->play_hit_sound=0;
+            
 }
 
 void inputHandler(u16 joy, u16 state, u16 changed)
@@ -282,10 +298,11 @@ void inputHandler(u16 joy, u16 state, u16 changed)
 		global_game->players[joy].end_varazo_frame = global_game->frame+VARAZO_DURATION;
 		if(check_collision(global_game)) {
 			// Play HIT sound
+			global_game->play_hit_sound=1;
 		}
 		else {
 			// Play EMPTY sound
-            XGM_startPlayPCM(SFX_FAIL, 1, SOUND_PCM_CH1);
+            global_game->play_empty_sound=1;
 		}
     }
 }
@@ -308,11 +325,13 @@ void readcontrollers(struct game *game)
 			game->players[i].x+=PLAYER_SPEED;
 			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
 			SPR_setAnim(game->players[i].player_sprite,ANIM_RIGHT);
+			
 		}
 		else if(value[i] & BUTTON_LEFT){
 			game->players[i].x-=PLAYER_SPEED;
 			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
 			SPR_setAnim(game->players[i].player_sprite,ANIM_LEFT);
+			
 		}
 		else if(!game->players[i].end_varazo_frame) {
 			if(!game->victory) {
