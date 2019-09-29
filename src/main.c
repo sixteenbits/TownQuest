@@ -163,6 +163,7 @@ void init_stage(u16 current_stage, struct game *game) {
 		game->players[i].x = 150;
     	game->players[i].end_varazo_frame=0;
     	game->players[i].lifes=INITIAL_LIFES;
+    	game->players[i].life_grace=0;
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
 		game->enemies[i].y = -1*random()%500;
@@ -307,12 +308,15 @@ int check_collision(struct game *game){
 					&& abs(game->players[i].y-game->person[j].y) < 20) {
 				SPR_setAnim(game->players[i].player_sprite, ANIM_FAIL);
 				SPR_setAnim(game->person[j].person_sprite,game->person[j].index+1);
-				game->players[i].lifes--;
-				sprite = INITIAL_LIFES-game->players[i].lifes;
-				if(sprite>2) {
-					sprite=2;
+				if(game->players[i].life_grace==0 || game->frame > game->players[i].life_grace) {
+					game->players[i].lifes--;
+					game->players[i].life_grace=game->frame+GRACE_PERIOD;
+					sprite = INITIAL_LIFES-game->players[i].lifes;
+					if(sprite>2) {
+						sprite=2;
+					}
+					SPR_setAnim(game->lifes, sprite);
 				}
-				SPR_setAnim(game->lifes, sprite);
 				return 1;
 			}
 		}

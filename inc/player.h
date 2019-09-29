@@ -13,6 +13,7 @@
 
 #define VARAZO_DURATION 15
 #define INITIAL_LIFES 3
+#define GRACE_PERIOD 30
 
 struct player {
 	// x position
@@ -27,6 +28,8 @@ struct player {
     Sprite* player_sprite;
     // Saves the frame where varazo finish
     u16 end_varazo_frame;
+    // Grace period after collision
+    u16 life_grace;
 };
 
 #endif
