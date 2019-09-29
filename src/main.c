@@ -104,10 +104,15 @@ void handlestate(struct game *game){
     else if(game->game_over && game->current_stage!=10) {
     	game->current_stage=10;
     }
+    // Change stage
+    else if(game->change_stage>0 && game->frame>game->change_stage) {
+    	//game->change_stage=0;
+    	//game->current_stage++;
+    }
 }
 
 void run_stage(u16 current_stage, struct game *game) {
-	int i;
+	int i, victory;
 	for(i=0; i<PLAYERS_SIZE; i++) {
 		// Varazo ends
 		if(game->players[i].end_varazo_frame && game->frame > game->players[i].end_varazo_frame) {
@@ -139,6 +144,22 @@ void run_stage(u16 current_stage, struct game *game) {
 			}
 		}
 	}
+	// Check Victory
+	victory = 1;
+	for(i=0; i<ENEMY_SIZE; i++) {
+		if(game->enemies[i].enabled==1) {
+			victory=0;
+		}
+	}
+	if(victory) {
+		game->victory=1;
+	}
+	if(victory && game->change_stage==0) {
+		for(i=0; i<PLAYERS_SIZE; i++) {
+			SPR_setAnim(game->players[i].player_sprite, ANIM_VICTORY);
+		}
+		game->change_stage=game->frame+STAGE_DELAY;
+	}
 
 	// Update persons
 	for(i=0; i<PERSON_SIZE; i++) {
@@ -160,6 +181,8 @@ void init_stage(u16 current_stage, struct game *game) {
 	int positions_s2[3]={50,150,240};
 
 	game->game_over=0;
+	game->victory=0;
+	game->change_stage=0;
     for(i=0; i<PLAYERS_SIZE; i++) {
 		game->players[i].y = 160;
 		game->players[i].x = 150;
@@ -245,6 +268,8 @@ void init_game_data(struct game *game){
     game->current_stage=0;
     game->loaded_stage=-1;
     game->game_over=0;
+    game->change_stage=0;
+    game->victory=0;
 }
 
 void inputHandler(u16 joy, u16 state, u16 changed)
@@ -290,7 +315,12 @@ void readcontrollers(struct game *game)
 			SPR_setAnim(game->players[i].player_sprite,ANIM_LEFT);
 		}
 		else if(!game->players[i].end_varazo_frame) {
-			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
+			if(!game->victory) {
+				SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
+			}
+			else {
+				SPR_setAnim(game->players[i].player_sprite,ANIM_VICTORY);
+			}
 		}
     }
 }
@@ -340,18 +370,26 @@ int check_collision(struct game *game){
 void removeAllSprites(struct game *game) {
 	int i;
 	for(i=0; i<ENEMY_SIZE; i++) {
-		SPR_releaseSprite(game->enemies[i].enemy_sprite);
-		game->enemies[i].enemy_sprite=NULL;
+		if(game->enemies[i].enemy_sprite!=NULL) {
+			SPR_releaseSprite(game->enemies[i].enemy_sprite);
+			game->enemies[i].enemy_sprite=NULL;
+		}
 	}
 	for(i=0; i<PERSON_SIZE; i++) {
-		SPR_releaseSprite(game->person[i].person_sprite);
-		game->person[i].person_sprite=NULL;
+		if(game->person[i].person_sprite!=NULL) {
+			SPR_releaseSprite(game->person[i].person_sprite);
+			game->person[i].person_sprite=NULL;
+		}
 	}
 	for(i=0; i<PLAYERS_SIZE; i++) {
-		SPR_releaseSprite(game->players[i].player_sprite);
-		game->players[i].player_sprite=NULL;
+		if(game->players[i].player_sprite!=NULL) {
+			SPR_releaseSprite(game->players[i].player_sprite);
+			game->players[i].player_sprite=NULL;
+		}
 	}
-	SPR_releaseSprite(game->lifes);
-	game->lifes=NULL;
+	if(game->lifes!=NULL) {
+		SPR_releaseSprite(game->lifes);
+		game->lifes=NULL;
+	}
 }
 

@@ -11,6 +11,7 @@
 #define ENEMY_SIZE 10
 #define PERSON_SIZE 10
 #define SCREEN_HEIGHT 224
+#define STAGE_DELAY 300
 
 struct game {
     // Backgrounds
@@ -31,6 +32,8 @@ struct game {
     int game_over;
     // sprite vidas
     Sprite *lifes;
+    u16 change_stage;
+    int victory;
 };
 
 #endif
