@@ -64,6 +64,7 @@ int main()
 void handlestate(struct game *game){
 	if(game->loaded_stage!=10 && game->current_stage==10) {
 		game->loaded_stage=10;
+		removeAllSprites(game);
 		VDP_resetScreen();
 		u16 ind=TILE_USERINDEX;
 		VDP_setPaletteColors(PAL0, (u16*)game_over.palette->data, 16);
@@ -85,11 +86,11 @@ void handlestate(struct game *game){
         VDP_drawImageEx(PLAN_A, &titulo, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
     }
 
-    if(game->loaded_stage!=2 && game->loaded_stage<10 && game->current_stage==2) {
-        game->loaded_stage=2;
-        init_stage(game->loaded_stage, game);
+    if(game->current_stage>=2 && game->current_stage<10 && game->loaded_stage!=game->current_stage) {
+    	game->loaded_stage=game->current_stage;
+    	init_stage(game->loaded_stage, game);
     }
-    if(game->loaded_stage>=2 && game->loaded_stage<10 && game->loaded_stage==game->current_stage) {
+    if(game->current_stage>=2 && game->current_stage<10 && game->loaded_stage==game->current_stage) {
         run_stage(game->loaded_stage, game);
     }
 
@@ -100,7 +101,7 @@ void handlestate(struct game *game){
     else if(game->current_stage==1 && game->frame > 600) {
         game->current_stage++;
     }
-    else if(game->game_over && game->loaded_stage!=10) {
+    else if(game->game_over && game->current_stage!=10) {
     	game->current_stage=10;
     }
 }
@@ -113,8 +114,9 @@ void run_stage(u16 current_stage, struct game *game) {
 			SPR_setAnim(game->players[i].player_sprite,ANIM_IDLE);
 			game->players[i].end_varazo_frame=0;
 		}
+		// Check end of lifes
 		if(game->players[i].lifes<=0) {
-			//game->game_over=1;
+			game->game_over=1;
 		}
 	}
 	for(i=0; i<ENEMY_SIZE; i++) {
@@ -267,18 +269,23 @@ void readcontrollers(struct game *game)
 {
 	int i;
 	int value[2];
+
+	if(game->game_over) {
+		return;
+	}
+
     //Se lee el estado del joistick en el puerto 1
     value[0] = JOY_readJoypad(JOY_1);
     value[1] = JOY_readJoypad(JOY_2);
 
     for(i=0; i<PLAYERS_SIZE; i++) {
 		if(value[i] & BUTTON_RIGHT){
-			game->players[i].x++;
+			game->players[i].x+=PLAYER_SPEED;
 			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
 			SPR_setAnim(game->players[i].player_sprite,ANIM_RIGHT);
 		}
 		else if(value[i] & BUTTON_LEFT){
-			game->players[i].x--;
+			game->players[i].x-=PLAYER_SPEED;
 			SPR_setPosition(game->players[i].player_sprite, game->players[i].x, game->players[i].y);
 			SPR_setAnim(game->players[i].player_sprite,ANIM_LEFT);
 		}
@@ -290,6 +297,11 @@ void readcontrollers(struct game *game)
 
 int check_collision(struct game *game){
 	int i, j, sprite;
+
+	if(game->game_over) {
+		return 0;
+	}
+
 	for(i=0; i<PLAYERS_SIZE; i++) {
 		for(j=0; j<ENEMY_SIZE; j++) {
 			if(game->enemies[j].enabled
@@ -323,5 +335,23 @@ int check_collision(struct game *game){
 	}
 
 	return 0;
+}
+
+void removeAllSprites(struct game *game) {
+	int i;
+	for(i=0; i<ENEMY_SIZE; i++) {
+		SPR_releaseSprite(game->enemies[i].enemy_sprite);
+		game->enemies[i].enemy_sprite=NULL;
+	}
+	for(i=0; i<PERSON_SIZE; i++) {
+		SPR_releaseSprite(game->person[i].person_sprite);
+		game->person[i].person_sprite=NULL;
+	}
+	for(i=0; i<PLAYERS_SIZE; i++) {
+		SPR_releaseSprite(game->players[i].player_sprite);
+		game->players[i].player_sprite=NULL;
+	}
+	SPR_releaseSprite(game->lifes);
+	game->lifes=NULL;
 }
 

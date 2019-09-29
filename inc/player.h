@@ -14,6 +14,7 @@
 #define VARAZO_DURATION 15
 #define INITIAL_LIFES 3
 #define GRACE_PERIOD 30
+#define PLAYER_SPEED 5
 
 struct player {
 	// x position

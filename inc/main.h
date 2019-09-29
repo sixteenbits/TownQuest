@@ -28,4 +28,6 @@ void readcontrollers(struct game *game);
 
 int check_collision(struct game *game);
 
+void removeAllSprites(struct game *game);
+
 #endif
