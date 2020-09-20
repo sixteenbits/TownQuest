@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                url: 'https://github.com/sixteenbits/TownQuest.git'
+            }
+        }
+        stage('Version') {
+            steps {
+                sh '''
+                    myversion=$(git log -1 | head -1 | sed 's/commit //')
+                    echo $myversion
+                    echo '#define VERSION' $myversion > src/version.h
+                '''
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''
+			# export GENDEV=/opt/gendev
+			make -f $GENDEV/sgdk/mkfiles/makefile.gen clean all
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+            	sh '''
+			echo 'Deploy...'
+            		#scp $WORKSPACE/out/rom.bin pi@192.168.1.10:/home/pi/RetroPie/roms/Town_Quest.md
+            	'''
+            }
+        }
+        
+    }
+}
