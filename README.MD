@@ -5,7 +5,8 @@ Impide la despoblación de tu pueblo a base de varazos
 
 ![Town Quest Screenshot](screenshot.png)
 
-[Play!](http://www.emiliollbb.net/emulatrix/?TownQuest.md)
+## Jugar!
+Pulsa el siguiente enlace para probar el juego en tu nvegador: [Play!](http://www.emiliollbb.net/emulatrix/?TownQuest.md)
 
 ## Autores
 * [zerasul](https://zerasul.me/)
